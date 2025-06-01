@@ -1,0 +1,326 @@
+{
+  "name": "utility-collection",
+  "displayName": "Code Editing",
+  "description": "useful, 大杂烩",
+  "version": "0.0.2",
+  "publisher": "utility-collection",
+  "repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-sample",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "msql",
+        "extensions": [
+          ".msql"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "pg",
+        "extensions": [
+          ".pg"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "msql",
+        "scopeName": "source.msql",
+        "path": "./syntaxes/msql.tmLanguage.json"
+      },
+      {
+        "language": "pg",
+        "scopeName": "source.pg",
+        "path": "./syntaxes/pg.tmLanguage.json"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "wonderland.PropertyInjection",
+          "when": "editorLangId == typescript"
+        },
+        {
+          "command": "wonderland.ConvertKWArgsIntoDict",
+          "when": "editorLangId == python"
+        },
+        {
+          "command": "wonderland.apple",
+          "when": "editorLangId == python"
+        },
+        {
+          "command": "wonderland.Println",
+          "when": "editorLangId == python"
+        },
+        {
+          "command": "wonderland.CSS",
+          "when": "editorLangId == typescriptreact"
+        },
+        {
+          "command": "wonderland.removeClosingTag",
+          "when": "editorLangId == typescriptreact"
+        },
+        {
+          "command": "wonderland.SORT",
+          "when": "editorLangId == snippets || editorLangId == jsonc"
+        },
+        {
+          "command": "wonderland.packageReference",
+          "when": "editorLangId == csharp"
+        },
+        {
+          "command": "wonderland.ofFunction",
+          "when": "editorLangId == csharp"
+        },
+        {
+          "command": "wonderland.convertAsToBracket",
+          "when": "editorLangId == javascript || editorLangId == typescript"
+        },
+        {
+          "command": "wonderland.functionDeclaration",
+          "when": "editorLangId == javascript || editorLangId == typescript"
+        },
+        {
+          "command": "wonderland.multipleStatements",
+          "when": "editorLangId == javascript || editorLangId == typescript"
+        },
+        {
+          "command": "wonderland.InterfaceOrType",
+          "when": "editorLangId == javascript || editorLangId == typescript"
+        },
+        {
+          "command": "wonderland.AddJsonTags",
+          "when": "editorLangId == go"
+        },
+        {
+          "command": "wonderland.inlineVariable",
+          "when": "editorLangId == go"
+        },
+        {
+          "command": "wonderland.fuck",
+          "when": "editorLangId == go"
+        },
+        {
+          "command": "wonderland.arrowFunction",
+          "when": "editorLangId == csharp"
+        },
+        {
+          "command": "wonderland.MethodOrFunction",
+          "when": "editorLangId == go"
+        },
+        {
+          "command": "wonderland.CJ",
+          "when": "editorLangId == javascript || editorLangId == typescript"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "wonderland.PropertyInjection",
+        "title": "PropertyInjection",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.ConvertKWArgsIntoDict",
+        "title": "ConvertKWArgsIntoDict",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.apple",
+        "title": "apple",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.Println",
+        "title": "Println",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.CSS",
+        "title": "CSS",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.removeClosingTag",
+        "title": "removeClosingTag",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.SORT",
+        "title": "SORT",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.packageReference",
+        "title": "packageReference",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.ofFunction",
+        "title": "ofFunction",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.convertAsToBracket",
+        "title": "convertAsToBracket",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.functionDeclaration",
+        "title": "functionDeclaration",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.multipleStatements",
+        "title": "multipleStatements",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.InterfaceOrType",
+        "title": "InterfaceOrType",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.MethodOrFunction",
+        "title": "MethodOrFunction",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.AddJsonTags",
+        "title": "AddJsonTags",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.inlineVariable",
+        "title": "inlineVariable",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.fuck",
+        "title": "fuck",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.CJ",
+        "title": "CJ",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.arrowFunction",
+        "title": "arrowFunction",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.focusChange",
+        "title": "Focus Change",
+        "category": "Wonderland"
+      },
+      {
+        "command": "wonderland.windowChange",
+        "title": "Window Change",
+        "category": "Wonderland"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "wonderland.insertSemicolon",
+        "key": ";",
+        "when": "editorTextFocus && (editorLangId == csharp || editorLangId == aspnetcorerazor || editorLangId == sql || editorLangId == msql|| editorLangId == css || editorLangId == rust || editorLangId == java || editorLangId == proto3 || editorLangId == properties)"
+      },
+      {
+        "command": "wonderland.mergeSql",
+        "key": "alt+e",
+        "when": "editorTextFocus && editorLangId == sql"
+      },
+      {
+        "command": "wonderland.Println",
+        "key": "ctrl+k ctrl+p"
+      },
+      {
+        "command": "wonderland.moveImportToTop",
+        "key": "ctrl+up",
+        "when": "editorLangId == typescript && editorTextFocus"
+      },
+      {
+        "command": "wonderland.ctrlAltp",
+        "key": "ctrl+alt+p",
+        "when": "editorLangId == csharp && editorTextFocus"
+      },
+      {
+        "command": "wonderland.splitStatement",
+        "key": "ctrl+k ctrl+q",
+        "when": "editorLangId == go && editorTextFocus"
+      },
+      {
+        "command": "wonderland.ctrlPlusn",
+        "key": "ctrl+n",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wonderland.removeComments",
+        "key": "ctrl+k ctrl+l",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wonderland.ctrlPlusy",
+        "key": "ctrl+y",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wonderland.ctrlAltPlusy",
+        "key": "ctrl+alt+y",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wonderland.ctrlPlusq",
+        "key": "ctrl+q",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wonderland.ctrlShiftQ",
+        "key": "ctrl+shift+q",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wonderland.Uncapitalize",
+        "key": "ctrl+i",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wonderland.ctrlPlusg",
+        "key": "ctrl+g",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "pnpm vsce package --no-dependencies",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.81.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "eslint": "^8.41.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.3",
+    "@vscode/test-electron": "^2.3.2"
+  }
+}

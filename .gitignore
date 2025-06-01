@@ -1,0 +1,10 @@
+/*
+!/src/
+!.gitignore
+!.prettierrc
+!.vscode/
+!.vscodeignore
+!LICENSE
+!README.md
+!package.json
+!tsconfig.json
