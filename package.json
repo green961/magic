@@ -99,20 +99,16 @@
           "when": "editorLangId == javascript || editorLangId == typescript"
         },
         {
+          "command": "wonderland.arrowFunction",
+          "when": "editorLangId == csharp"
+        },
+        {
           "command": "wonderland.AddJsonTags",
           "when": "editorLangId == go"
         },
         {
           "command": "wonderland.inlineVariable",
-          "when": "editorLangId == go"
-        },
-        {
-          "command": "wonderland.fuck",
-          "when": "editorLangId == go"
-        },
-        {
-          "command": "wonderland.arrowFunction",
-          "when": "editorLangId == csharp"
+          "when": "editorLangId == go || editorLangId == typescript"
         },
         {
           "command": "wonderland.MethodOrFunction",
@@ -206,11 +202,6 @@
         "category": "Wonderland"
       },
       {
-        "command": "wonderland.fuck",
-        "title": "fuck",
-        "category": "Wonderland"
-      },
-      {
         "command": "wonderland.CJ",
         "title": "CJ",
         "category": "Wonderland"
@@ -235,12 +226,12 @@
       {
         "command": "wonderland.insertSemicolon",
         "key": ";",
-        "when": "editorTextFocus && (editorLangId == csharp || editorLangId == aspnetcorerazor || editorLangId == sql || editorLangId == msql|| editorLangId == css || editorLangId == rust || editorLangId == java || editorLangId == proto3 || editorLangId == properties)"
+        "when": "editorTextFocus && (editorLangId == c || editorLangId == csharp || editorLangId == aspnetcorerazor || editorLangId == sql || editorLangId == msql|| editorLangId == css || editorLangId == rust || editorLangId == java || editorLangId == proto3 || editorLangId == properties)"
       },
       {
-        "command": "wonderland.mergeSql",
-        "key": "alt+e",
-        "when": "editorTextFocus && editorLangId == sql"
+        "command": "wonderland.mergeLines",
+        "key": "alt+s",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == go)"
       },
       {
         "command": "wonderland.Println",

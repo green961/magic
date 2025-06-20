@@ -8,6 +8,7 @@ import { shUtility } from './utilitySH'
 export const LanguageInstances = {
   javascript: commonUtility,
   typescript: commonUtility,
+  c: commonUtility,
   vue: commonUtility,
   json: commonUtility,
   snippets: commonUtility,

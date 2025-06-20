@@ -56,14 +56,18 @@ export function activate(ctx: vscode.ExtensionContext) {
     )
   }
 
-  vscode.commands.registerTextEditorCommand('wonderland.mergeSql', (editor) => {
+  vscode.commands.registerTextEditorCommand('wonderland.mergeLines', (editor) => {
     const { document, selection } = editor
-    let text = ''
-    if ((text = document.getText(selection).trim())) {
-      if (text.slice(-1) === ';') {
-        text = text.slice(0, -1)
+    const langObject = getInstance(editor.document.languageId as Language)
+    let text = document.getText(selection).trim()
+    if (text) {
+      if (langObject.languageId === 'sql') {
+        if (text.slice(-1) === ';') {
+          text = text.slice(0, -1)
+        }
+      } else {
+        text = text.split('\n').join(', ')
       }
-
       vscode.env.clipboard.writeText(text.replace(/\s+/g, ' '))
     }
   })
@@ -722,36 +726,7 @@ export function activate(ctx: vscode.ExtensionContext) {
     }
   })
 
-  vscode.commands.registerTextEditorCommand('wonderland.inlineVariable', async (editor, edit) => {
-    // aa := strconv.Itoa(i)
-    // bb := String(aa)
-
-    const { document, selection, selections } = editor
-    const word = document.getText(document.getWordRangeAtPosition(selection.active))
-    let re = new RegExp(String.raw`${word}\b\s*:=(.*)`)
-
-    let statementText: string
-    let needReplace: vscode.Range
-    let needDeleteLine: vscode.Range
-    selections.forEach((s) => {
-      let lineIndex = s.active.line
-      const textLine = document.lineAt(lineIndex)
-      const { text } = textLine
-
-      if (re.test(text)) {
-        statementText = re.exec(text)[1].trim()
-        needDeleteLine = textLine.rangeIncludingLineBreak
-      } else {
-        needReplace = document.getWordRangeAtPosition(s.active)
-      }
-    })
-
-    edit.replace(needReplace, statementText)
-    edit.delete(needDeleteLine)
-    // editor.selection = new vscode.Selection(selection.end, selection.end)
-    editor.selection = new vscode.Selection(selection.active, selection.active)
-  })
-
+  // go start
   vscode.commands.registerTextEditorCommand('wonderland.AddJsonTags', async (editor) => {
     let value = await vscode.window.showInputBox({ value: 'json', ignoreFocusOut: true })
     value = value.trim() || 'json'
@@ -802,6 +777,45 @@ export function activate(ctx: vscode.ExtensionContext) {
     })
   })
 
+  vscode.commands.registerTextEditorCommand('wonderland.inlineVariable', async (editor, edit) => {
+    // aa := strconv.Itoa(i)
+    // bb := String(aa) 光标先在aa区间
+    // bb := String(strconv.Itoa(i))
+
+    // type aa = StringToUnion<'ABC'>
+    // type bb = AllCombinationsByUnion<aa>
+
+    const langObject = getInstance(editor.document.languageId as Language)
+    const { document, selection, selections } = editor
+    const word = document.getText(document.getWordRangeAtPosition(selection.active))
+    let re: RegExp
+    if (langObject.languageId == 'go') {
+      re = new RegExp(String.raw`\b${word}\b\s*:=(.*)`)
+    } else {
+      re = new RegExp(String.raw`${langObject.letConst.join('|')}\s+\b${word}\b\s*=(.*)`)
+    }
+
+    let statementText: string
+    let needReplace: vscode.Range
+    let needDeleteLine: vscode.Range
+    selections.forEach((s) => {
+      let lineIndex = s.active.line
+      const textLine = document.lineAt(lineIndex)
+      const { text } = textLine
+
+      if (re.test(text)) {
+        statementText = re.exec(text)[1].trim()
+        needDeleteLine = textLine.rangeIncludingLineBreak
+      } else {
+        needReplace = document.getWordRangeAtPosition(s.active)
+      }
+    })
+
+    edit.replace(needReplace, statementText)
+    edit.delete(needDeleteLine)
+    editor.selection = new vscode.Selection(selection.active, selection.active)
+  })
+
   vscode.commands.registerTextEditorCommand('wonderland.MethodOrFunction', (editor, edit) => {
     const { document, selection } = editor
 
@@ -825,6 +839,49 @@ export function activate(ctx: vscode.ExtensionContext) {
       return edit.replace(range, newString)
     }
   })
+
+  ctx.subscriptions.push(
+    vscode.commands.registerTextEditorCommand('wonderland.splitStatement', (editor, edit) => {
+      const { document, selection } = editor
+
+      const {
+        text,
+        range,
+        firstNonWhitespaceCharacterIndex: indentSize,
+      } = document.lineAt(selection.active)
+
+      let re = /(?<=\bif)(\s+.*;)/
+
+      if (re.test(text)) {
+        let extractStr: string
+        const newString = text.replace(re, function (matched) {
+          extractStr = matched
+          return ''
+        })
+
+        edit.replace(range, `${'\t'.repeat(indentSize)}${extractStr.trim().replace(';', '')}\n${newString}`)
+      } else {
+        if (/^\s*if\s+/.test(text)) {
+          const { text: textPre, rangeIncludingLineBreak } = document.lineAt(selection.active.line - 1)
+
+          edit.delete(rangeIncludingLineBreak)
+          const [indent, suffix] = text.split('if ')
+
+          edit.replace(range, indent + 'if ' + textPre.trim() + '; ' + suffix)
+        } else {
+          re = /(\w+)\s*:=/
+          if (re.test(text)) {
+            const newString = text.replace(re, function (_, varName) {
+              return `var ${varName} =`
+            })
+
+            edit.replace(range, newString)
+          }
+        }
+      }
+    })
+  )
+  // go end
 
   vscode.commands.registerTextEditorCommand('wonderland.InterfaceOrType', (editor, edit) => {
     const langObject = getInstance(editor.document.languageId as Language)
@@ -975,48 +1032,6 @@ export function activate(ctx: vscode.ExtensionContext) {
       // await vscode.commands.executeCommand('editor.action.transformToCamelcase')
       // 用这两个命令在 ctrl+z 的时候会有中间结果`update_user_dto`
       // update(@Body() updateUserDto: update_user_dto) {
-    })
-  )
-
-  ctx.subscriptions.push(
-    vscode.commands.registerTextEditorCommand('wonderland.splitStatement', (editor, edit) => {
-      const { document, selection } = editor
-
-      const {
-        text,
-        range,
-        firstNonWhitespaceCharacterIndex: indentSize,
-      } = document.lineAt(selection.active)
-
-      let re = /(?<=\bif)(\s+.*;)/
-
-      if (re.test(text)) {
-        let extractStr: string
-        const newString = text.replace(re, function (matched) {
-          extractStr = matched
-          return ''
-        })
-
-        edit.replace(range, `${'\t'.repeat(indentSize)}${extractStr.trim().replace(';', '')}\n${newString}`)
-      } else {
-        if (/^\s*if\s+/.test(text)) {
-          const { text: textPre, rangeIncludingLineBreak } = document.lineAt(selection.active.line - 1)
-
-          edit.delete(rangeIncludingLineBreak)
-          const [indent, suffix] = text.split('if ')
-
-          edit.replace(range, indent + 'if ' + textPre.trim() + '; ' + suffix)
-        } else {
-          re = /(\w+)\s*:=/
-          if (re.test(text)) {
-            const newString = text.replace(re, function (_, varName) {
-              return `var ${varName} =`
-            })
-
-            edit.replace(range, newString)
-          }
-        }
-      }
     })
   )
 

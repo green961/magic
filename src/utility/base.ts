@@ -122,18 +122,6 @@ export class Base {
     }
   }
 
-  // ctrlAltPlusy(editor: TextEditor, edit: TextEditorEdit) {
-  //   const { document, selections, selection } = editor
-
-  //   let multiple = document.getText(selection)
-  //   if (selections.length === 2) {
-  //     let singleLine = document.lineAt(selections[1].active.line)
-
-  //     edit.replace(selection, singleLine.text)
-  //     edit.replace(singleLine.range, multiple)
-  //     editor.selection = new vscode.Selection(selection.active, selection.active)
-  //   }
-  // }
 
   ctrlPlusy(editor: TextEditor, edit: TextEditorEdit) {
     const { document, selections, selection } = editor
