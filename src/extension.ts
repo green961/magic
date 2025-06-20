@@ -77,23 +77,32 @@ export function activate(ctx: vscode.ExtensionContext) {
     const semi = ';'
     const { document, selections, selection } = editor
 
-    if (selections.length === 1 && selection.start.line === selection.end.line) {
-      const { line } = selection.active
+    let p: vscode.Selection[] = []
+    for (let i = 0; i < selections.length; i++) {
+      let selection = selections[i]
 
-      const textLine = document.lineAt(line)
+      if (selection.start.line === selection.end.line) {
+        const { line } = selection.active
 
-      const pos = insertSemiAtEnd(line)
-      if (pos) {
-        const char = selection.active.character
-        const { text } = textLine
+        const textLine = document.lineAt(line)
 
-        if (getSemiPair(text).some(([start, end]) => char > start && char <= end)) {
-          edit.insert(selection.active, ';')
-        } else {
-          editor.selection = new vscode.Selection(line, pos, line, pos)
+        const pos = insertSemiAtEnd(line)
+        if (pos) {
+          const char = selection.active.character
+          const { text } = textLine
+
+          if (getSemiPair(text).some(([start, end]) => char > start && char <= end)) {
+            edit.insert(selection.active, ';')
+          } else {
+            // editor.selection = new vscode.Selection(line, pos, line, pos)
+            p.push(new vscode.Selection(line, pos, line, pos))
+          }
         }
       }
-
+    }
+    if (p.length) {
+      editor.selections = [...p]
+      // editor.selections = p
       return
     }
 
